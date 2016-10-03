@@ -1,1 +1,2 @@
 # JavaProjekt
+Projektiga loodav mäng peaks aitama lapsi, kes alles matemaatikaga tutvuvad. Esimeses valikus valitakse, kas soovitakse arve järjestada, võrrelda, liita, lahutada, korrutada või jagada. Teises valikus saab valida arvude piirid kas siis tegevuste, tehete või vastuste jaoks, vastavalt eelnenud valikule. Arvude järjestamisel võetakse aega ja loetakse valesid vajutusi, arvutustel samuti. Näiteks kolmandal arvutuse valel vastusel kuvatakse õige tulemus ja andakse ette uus ülesanne.
