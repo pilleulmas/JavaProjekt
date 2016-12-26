@@ -13,8 +13,8 @@ public class Korrutamine {
         int max = klaviatuur.nextInt();
 
         //leian suvalised tegurid
-        int esimene = (int) Math.floor(Math.random()*(max+1));
-        int teine = (int) Math.floor(Math.random()*(max+1));
+        int esimene = (int) Math.floor(Math.random() * max) + 1;
+        int teine = (int) Math.floor(Math.random() * max) + 1;
         int tulemus = esimene * teine;
 
 
