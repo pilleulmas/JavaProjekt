@@ -6,10 +6,12 @@ public class Tehted {
     int Arv_1, Arv_2, Vastus, a, b, c;
     String mark ="";
 
+    /*
     public String getTehte_tyyp() {return Tehte_tyyp;}
     public int getArv_1() {return Arv_1;}
     public int getArv_2() {return Arv_2;}
     public int getVastus() {return Vastus;}
+    */
 
     public void genereeri(int max, String tehte_tyyp) {
         this.Arv_1 = (int) Math.floor(Math.random()*max)+1;
