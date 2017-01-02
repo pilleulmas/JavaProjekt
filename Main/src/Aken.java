@@ -14,25 +14,24 @@ import javafx.stage.Stage;
  */
 public class Aken {
     static int max =10;
-    static Tehted[] tehted = new Tehted[5];
+    static Tehted[] tehted = new Tehted[10];
     public Stage stage = new Stage();
 
     public Aken(){
         algaken();
     }
     public void algaken(){
-        Label pealkiri = new Label("Vali maksimaalne ja tehte liik!");
 
-        HBox valik = new HBox();
+        HBox valik = new HBox();                                //Ülemise paneeli välimus
             valik.setAlignment(Pos.BOTTOM_CENTER);
             valik.setSpacing(20);
 
-        Label slText = new Label();
+        Label slText = new Label();                             //slideri pealkiri
             slText.setFont(Font.font ("Verdana", 20));
             slText.setText("Vali maksimaalne\nkordaja/liidetav");
             slText.setAlignment(Pos.BOTTOM_CENTER);
         Label slmax = new Label();
-        Slider slider = new Slider();
+        Slider slider = new Slider();                           //tehete maksimaalse valikuks slider
             slider.setMin(0);
             slider.setMax(100);
             slider.setValue(10);
@@ -43,35 +42,40 @@ public class Aken {
             slider.valueProperty().addListener((observable, vanaVaartus, uusVaartus) -> {
             slmax.setText("Max on " + uusVaartus.intValue());
             max = slider.valueProperty().intValue();
-            System.out.println(max);
         });
 
-        VBox vasak = new VBox();
+        VBox vasak = new VBox();                                //vasakpoolne akna sisu
             vasak.setAlignment(Pos.TOP_CENTER);
-            vasak.getChildren().addAll(slText, slider, slmax);
+            vasak.getChildren().addAll(slText, slider, slmax);  //vasakpoolse sisu seadistus
 
-        GridPane kesk = new GridPane();
+        Label pealkiri = new Label("Vali maksimaalne ja tehte liik!");
+        pealkiri.setFont(Font.font ("Verdana", 20));
+        GridPane kesk = new GridPane();                         //keskpaneel
             kesk.setAlignment(Pos.TOP_CENTER);
             kesk.add(pealkiri, 1, 0,4,1);
 
-        Label[] ylesanded = new Label[5];
-        TextField[] vastused = new TextField[5];
-        Label[] oiged = new Label[5];
+        Label[] ylesanded = new Label[10];                      //massiivid keskpaneeli sisu jaoks
+        TextField[] vastused = new TextField[10];
+        Label[] oiged = new Label[10];
 
-            for (int i=0; i<5; i++) {
+            for (int i=0; i<10; i++) {                          //keskpaneeli tühi sisu
             ylesanded[i]=new Label("");
+                ylesanded[i].setFont(Font.font ("Verdana", 15));
             vastused[i]=new TextField("Sisesta vastus");
+                vastused[i].setFont(Font.font ("Verdana", 15));
             oiged[i]=new Label("");
+                oiged[i].setFont(Font.font ("Verdana", 15));
 
-            kesk.add(ylesanded[i],0,i+1);
+            kesk.add(ylesanded[i],0,i+1);                       //keskpaneeli seadistus
             kesk.add(vastused[i],1,i+1);
             kesk.add(oiged[i],2,i+1);
         }
 
-        Button kontroll = new Button("Kontroll");
+        Button kontroll = new Button("Kontroll");               //vastuste kontrollimise nupp
+        kontroll.setFont(Font.font ("Verdana", 20));
             kontroll.setOnAction((event) -> {
             System.out.println("Kontrollin vastused!");
-            for(int i =0; i<5;i++){
+            for(int i =0; i<10;i++){                            //kontrollib ükshaaval vastused üle
                 try{
                     if(Integer.parseUnsignedInt(vastused[i].getText())== tehted[i].c) {
                         oiged[i].setText("Õige vastus!");
@@ -83,18 +87,18 @@ public class Aken {
             }
         });
 
-        kesk.add(kontroll, 1, 6);
+        kesk.add(kontroll, 1, 11);                          //kontrolli nupp keskpaneelile
 
-        BorderPane aken = new BorderPane();
+        BorderPane aken = new BorderPane();                 //terve aken BorderPane
             aken.setTop(valik);
             aken.setCenter(kesk);
             aken.setLeft(vasak);
-        Scene esimene = new Scene(aken, 800, 600);
+        Scene esimene = new Scene(aken, 800, 600);          //Stseeni suurus
             stage.setScene(esimene);
             stage.show();
 
 
-        ToggleGroup g = new ToggleGroup();
+        ToggleGroup g = new ToggleGroup();                  //valiku nupud
         ToggleButton e1 = new ToggleButton("Liitmine");
             e1.setUserData("Liitmine");
         ToggleButton e2 = new ToggleButton("Lahutamine");
@@ -105,23 +109,23 @@ public class Aken {
             e4.setUserData("Jagamine");
         ToggleButton e5 = new ToggleButton("Järjestamine");
             e5.setUserData("J2rjestamine");
-            e1.setToggleGroup(g);
+            e1.setToggleGroup(g);                           //nupud ühtse grupi alla
             e2.setToggleGroup(g);
             e3.setToggleGroup(g);
             e4.setToggleGroup(g);
             e5.setToggleGroup(g);
-            g.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(g.getSelectedToggle().getUserData().toString());
+            g.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {    //valiku tulemus
 
-            for (int i = 0; i<5; i++) {
+            for (int i = 0; i<10; i++) {                    //tühja keskosa täitmine valitud ülesannetega
                 tehted[i] = new Tehted();
-                tehted[i].genereeri(max, g.getSelectedToggle().getUserData().toString());
+                tehted[i].genereeri(max, g.getSelectedToggle().getUserData().toString());   //Tehete genereerimise meetodi kasutus
                 ylesanded[i].setText(tehted[i].a+" "+tehted[i].mark+" "+tehted[i].b);
                 vastused[i].setText("");
+                oiged[i].setText("");
             }
         });
 
-        valik.getChildren().addAll(e1, e2, e3, e4, e5);
+        valik.getChildren().addAll(e1, e2, e3, e4, e5);     //Valiku nupud ülapaneeli
 
 
     }

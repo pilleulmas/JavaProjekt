@@ -13,33 +13,33 @@ public class Tehted {
     public int getVastus() {return Vastus;}
     */
 
-    public void genereeri(int max, String tehte_tyyp) {
-        this.Arv_1 = (int) Math.floor(Math.random()*max)+1;
-        this.Arv_2 = (int) Math.floor(Math.random()*max)+1;
+    public void genereeri(int max, String tehte_tyyp) {         //tehete genereerimine
+        this.Arv_1 = (int) Math.floor(Math.random()*max)+1;     //esimene suvaarv
+        this.Arv_2 = (int) Math.floor(Math.random()*max)+1;     //teine suvaarv
         this.Tehte_tyyp = tehte_tyyp;
-        switch(tehte_tyyp){
-            case "Liitmine":
+        switch(tehte_tyyp){                                     //tehte tüübi järgi tehete kuvamine
+            case "Liitmine":                                    //arv_1 + arv_2 = vastus
                 this.Vastus= Arv_1 + Arv_2;
                 this.a= Arv_1;
                 this.b= Arv_2;
                 this.c=Vastus;
                 this.mark = "+";
                 break;
-            case "Lahutamine":
+            case "Lahutamine":                                  //vastus - arv_1 = arv_2
                 this.Vastus= Arv_1 + Arv_2;
                 this.a=Vastus;
                 this.b= Arv_1;
                 this.c= Arv_2;
                 this.mark="-";
                 break;
-            case "Korrutamine":
+            case "Korrutamine":                                 //arv_1 * arv_2 = vastus
                 this.Vastus= Arv_1 * Arv_2;
                 this.a= Arv_1;
                 this.b= Arv_2;
                 this.c=Vastus;
                 this.mark="*";
                 break;
-            case "Jagamine":
+            case "Jagamine":                                    //vastus / arv_1 = arv_2
                 this.Vastus= Arv_1 * Arv_2;
                 this.a=Vastus;
                 this.b= Arv_1;
@@ -48,6 +48,5 @@ public class Tehted {
                 break;
             default: System.out.println("mingi vigane sisend!"); break;
         }
-        System.out.println(Arv_1 +mark+ Arv_2);
     }
 }
