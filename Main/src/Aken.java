@@ -9,18 +9,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 /**
  * Created by Pille on 2.01.2017.
  */
 public class Aken {
-    static int max =10;
-    static Tehted[] tehted = new Tehted[10];
-    public Stage stage = new Stage();
+    private static int max =10;
+    private static Tehted[] tehted = new Tehted[10];
+    private Stage stage = new Stage();
 
     public Aken(){
         algaken();
     }
-    public void algaken(){
+    private void algaken(){
 
         HBox valik = new HBox();                                //Ülemise paneeli välimus
             valik.setAlignment(Pos.BOTTOM_CENTER);
@@ -54,6 +56,9 @@ public class Aken {
             kesk.setAlignment(Pos.TOP_CENTER);
             kesk.add(pealkiri, 1, 0,4,1);
 
+        GridPane keskJ2r = new GridPane();                         //keskpaneel
+        keskJ2r.setAlignment(Pos.TOP_CENTER);
+
         Label[] ylesanded = new Label[10];                      //massiivid keskpaneeli sisu jaoks
         TextField[] vastused = new TextField[10];
         Label[] oiged = new Label[10];
@@ -71,7 +76,7 @@ public class Aken {
             kesk.add(oiged[i],2,i+1);
         }
 
-        Button kontroll = new Button("Kontroll");               //vastuste kontrollimise nupp
+        Button kontroll = new Button("Kontroll");               //keskpaneeli vastuste kontrollimise nupp
         kontroll.setFont(Font.font ("Verdana", 20));
             kontroll.setOnAction((event) -> {
             System.out.println("Kontrollin vastused!");
@@ -97,7 +102,6 @@ public class Aken {
             stage.setScene(esimene);
             stage.show();
 
-
         ToggleGroup g = new ToggleGroup();                  //valiku nupud
         ToggleButton e1 = new ToggleButton("Liitmine");
             e1.setUserData("Liitmine");
@@ -115,18 +119,64 @@ public class Aken {
             e4.setToggleGroup(g);
             e5.setToggleGroup(g);
             g.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {    //valiku tulemus
+                if (g.getSelectedToggle().getUserData().toString() == "J2rjestamine") {
 
-            for (int i = 0; i<10; i++) {                    //tühja keskosa täitmine valitud ülesannetega
-                tehted[i] = new Tehted();
-                tehted[i].genereeri(max, g.getSelectedToggle().getUserData().toString());   //Tehete genereerimise meetodi kasutus
-                ylesanded[i].setText(tehted[i].a+" "+tehted[i].mark+" "+tehted[i].b);
-                vastused[i].setText("");
-                oiged[i].setText("");
-            }
-        });
+                    boolean tunnus;
+                    int loendur = 0;
+                    int arv;
+                    int j2rjestatud[] = new int[12];
+                    int numbrid[] = new int[12];
+                    for (int mitmes = 0; mitmes < 12; mitmes++) {   //teen 12-se massiivi suvanumbritest
+                        do {
+                            tunnus = false;
+                            if (max < 12) {
+                                arv = (int) Math.floor(Math.random() * 12) + 1;
+                            } else {
+                                arv = (int) Math.floor(Math.random() * max) + 1;
+                            }
+                            for (int i = 0; i < mitmes; i++)
+                                if (arv == numbrid[i]) tunnus = true;
+                        } while (tunnus);
+                        numbrid[mitmes] = arv;          //lisan arvu segamini massiivi
+                        j2rjestatud[mitmes] = arv;      //lisan arvu j2rjestamise massiivi
+                    }
 
-        valik.getChildren().addAll(e1, e2, e3, e4, e5);     //Valiku nupud ülapaneeli
+                    Arrays.sort(j2rjestatud);           //sorteerin j2rjestamise massiivi
+                    System.out.println(Arrays.toString(numbrid));
+                    System.out.println(Arrays.toString(j2rjestatud));
 
+                    for (int j = 0; j < 12; j++) {      //asetan numbritega nupud gridPanele
+                        Button nupp = new Button(Integer.toString(numbrid[j]));
+                        keskJ2r.add(nupp, j % 3, j / 3);
+                        nupp.setOnAction((event) -> {
 
+                            //j2rKontroll();
+                            System.out.println(nupp.getText());
+                            if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
+                                System.out.println("Tubli!");
+                            }
+                        });
+                    }
+                    /*public void j2rKontroll(){
+                        if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
+                            System.out.println("Tubli!");
+                            loendur++;
+                        }
+                    }*/
+                    aken.setCenter(keskJ2r);                           //keskosa täitmine järjestamise nuppudega
+
+                }
+                else {
+                    aken.setCenter(kesk);
+                    for (int i = 0; i < 10; i++) {                    //tühja keskosa täitmine valitud ülesannetega
+                        tehted[i] = new Tehted();
+                        tehted[i].genereeri(max, g.getSelectedToggle().getUserData().toString());   //Tehete genereerimise meetodi kasutus
+                        ylesanded[i].setText(tehted[i].a + " " + tehted[i].mark + " " + tehted[i].b);
+                        vastused[i].setText("");
+                        oiged[i].setText("");
+                    }
+                }
+            });
+        valik.getChildren().addAll(e1, e2, e3, e4, e5);     //Valiku nupud ülapaneelile
     }
 }
