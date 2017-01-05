@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 
+import static javafx.scene.paint.Color.*;
+
 /**
  * Created by Pille on 2.01.2017.
  */
@@ -24,11 +26,14 @@ public class Aken {
     int arv;
     int j2rjestatud[] = new int[12];
     int numbrid[] = new int[12];
+    Label vead = new Label("");
+    Label viimane = new Label("");
+    int aps = 0;
 
     public Aken(){
         algaken();
     }
-    private void algaken(){
+    public void algaken(){
 
         HBox valik = new HBox();                                //Ülemise paneeli välimus
             valik.setAlignment(Pos.BOTTOM_CENTER);
@@ -64,38 +69,13 @@ public class Aken {
 
         GridPane keskJ2r = new GridPane();                         //keskpaneel
         keskJ2r.setAlignment(Pos.TOP_CENTER);
-
-        for (int mitmes = 0; mitmes < 12; mitmes++) {   //teen 12-se massiivi suvanumbritest
-            do {
-                tunnus = false;
-                if (max < 12) {
-                    arv = (int) Math.floor(Math.random() * 12) + 1;
-                } else {
-                    arv = (int) Math.floor(Math.random() * max) + 1;
-                }
-                for (int i = 0; i < mitmes; i++)
-                    if (arv == numbrid[i]) tunnus = true;
-            } while (tunnus);
-            numbrid[mitmes] = arv;          //lisan arvu segamini massiivi
-            j2rjestatud[mitmes] = arv;      //lisan arvu j2rjestamise massiivi
-        }
-
-        Arrays.sort(j2rjestatud);           //sorteerin j2rjestamise massiivi
-        System.out.println(Arrays.toString(numbrid));
-        System.out.println(Arrays.toString(j2rjestatud));
-
-        for (int j = 0; j < 12; j++) {      //asetan numbritega nupud gridPanele
-            Button nupp = createButton(Integer.toString(numbrid[j]));
-            keskJ2r.add(nupp, j % 3, j / 3);
-                        /*nupp.setOnAction((event) -> {
-
-                            //j2rKontroll();
-                            System.out.println(nupp.getText());
-                            if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
-                                System.out.println("Tubli!");
-                            }
-                        });*/
-        }
+        Label juhend = new Label("Kliki nuppudel suurenevas järjekorras!");
+        juhend.setFont(Font.font ("Verdana", 20));
+        keskJ2r.add(juhend,0,0,12,1);
+        vead.setFont(Font.font ("Verdana", 20));
+        viimane.setFont(Font.font ("Verdana", 20));
+        keskJ2r.add(viimane,0,5,12,1);
+        keskJ2r.add(vead,0,6,12,1);
 
         Label[] ylesanded = new Label[10];                      //massiivid keskpaneeli sisu jaoks
         TextField[] vastused = new TextField[10];
@@ -122,10 +102,14 @@ public class Aken {
                 try{
                     if(Integer.parseUnsignedInt(vastused[i].getText())== tehted[i].c) {
                         oiged[i].setText("Õige vastus!");
-                    } else {oiged[i].setText("Vale vastus, õige on "+tehted[i].c);}
+                        oiged[i].setTextFill(BLACK);
+                    } else {oiged[i].setText("Vale vastus, õige on "+tehted[i].c);
+                        oiged[i].setTextFill(RED);
+                    }
                 }
                 catch(Exception e) {
                     oiged[i].setText("Vastus on puudu!");
+                    oiged[i].setTextFill(ORANGE);
                 }
             }
         });
@@ -158,6 +142,34 @@ public class Aken {
             e5.setToggleGroup(g);
             g.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {    //valiku tulemus
                 if (g.getSelectedToggle().getUserData().toString() == "J2rjestamine") {
+                    for (int mitmes = 0; mitmes < 12; mitmes++) {   //teen 12-se massiivi suvanumbritest
+                        do {
+                            tunnus = false;
+                            if (max > 11) {
+                                arv = (int) Math.floor(Math.random() * max) + 1;
+                            } else {
+                                arv = (int) Math.floor(Math.random() * 12) + 1;
+                            }
+                            for (int i = 0; i < mitmes; i++)
+                                if (arv == numbrid[i]) tunnus = true;
+                        } while (tunnus);
+                        numbrid[mitmes] = arv;          //lisan arvu segamini massiivi
+                        j2rjestatud[mitmes] = arv;      //lisan arvu j2rjestamise massiivi
+                    }
+
+                    Arrays.sort(j2rjestatud);           //sorteerin j2rjestamise massiivi
+                    System.out.println(Arrays.toString(numbrid));
+                    System.out.println(Arrays.toString(j2rjestatud));
+
+                    for (int j = 0; j < 12; j++) {      //asetan numbritega nupud gridPanele
+                        Button nupp = createButton(Integer.toString(numbrid[j]));
+                        keskJ2r.add(nupp, (j % 3)+1, (j / 3)+1,4,1);
+                    }
+
+                    loendur = 0;
+                    aps = 0;
+                    vead.setText("");
+                    viimane.setText("");
                     aken.setCenter(keskJ2r);                           //keskosa täitmine järjestamise nuppudega
                 }
                 else {
@@ -173,16 +185,40 @@ public class Aken {
             });
         valik.getChildren().addAll(e1, e2, e3, e4, e5);     //Valiku nupud ülapaneelile
     }
-    private Button createButton(String text) {
+    public Button createButton(String text) {               //järjestamise nuppude loomine
         Button nupp = new Button(text);
+        nupp.setStyle("-fx-font: 20 verdana; -fx-base: #b6e7c9;");
         nupp.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        nupp.setOnAction(e -> {j2rKontroll(); System.out.println(text);});
+        nupp.setMinSize(150.0, Control.USE_PREF_SIZE);
+        nupp.setOnAction(e -> {j2rKontroll(nupp.getText()); System.out.println(text);});
         return nupp ;
     }
-    private void j2rKontroll(){
-        if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
+    public void j2rKontroll(String a){                      //järjestamise klikkide kontroll
+        if (Integer.parseInt(a)==j2rjestatud[loendur]){
             System.out.println("Tubli!");
-            loendur++;
+            if (loendur==11){
+                viimane.setText("Tubli! Leidsid viimase!");
+                viimane.setTextFill(LIMEGREEN);
+                loendur++;
+            }
+            else {
+                loendur++;
+                viimane.setText("Tubli! Viimane number oli " + j2rjestatud[loendur-1]);
+                viimane.setTextFill(BLACK);
+            }
+        }
+        else {
+            System.out.println("Proovi uuesti!");
+            aps++;
+            vead.setText("vigade arv = " + aps);
+            if(loendur==0){
+                viimane.setText("Proovi uuesti! Leia kõige väiksem arv!");
+                viimane.setTextFill(RED);
+            }
+            else{
+                viimane.setText("Proovi uuesti! Viimane number oli " + j2rjestatud[loendur-1]);
+                viimane.setTextFill(RED);
+            }
         }
     }
 }
