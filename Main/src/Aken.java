@@ -19,6 +19,12 @@ public class Aken {
     private static Tehted[] tehted = new Tehted[10];
     private Stage stage = new Stage();
 
+    boolean tunnus;
+    int loendur = 0;
+    int arv;
+    int j2rjestatud[] = new int[12];
+    int numbrid[] = new int[12];
+
     public Aken(){
         algaken();
     }
@@ -58,6 +64,38 @@ public class Aken {
 
         GridPane keskJ2r = new GridPane();                         //keskpaneel
         keskJ2r.setAlignment(Pos.TOP_CENTER);
+
+        for (int mitmes = 0; mitmes < 12; mitmes++) {   //teen 12-se massiivi suvanumbritest
+            do {
+                tunnus = false;
+                if (max < 12) {
+                    arv = (int) Math.floor(Math.random() * 12) + 1;
+                } else {
+                    arv = (int) Math.floor(Math.random() * max) + 1;
+                }
+                for (int i = 0; i < mitmes; i++)
+                    if (arv == numbrid[i]) tunnus = true;
+            } while (tunnus);
+            numbrid[mitmes] = arv;          //lisan arvu segamini massiivi
+            j2rjestatud[mitmes] = arv;      //lisan arvu j2rjestamise massiivi
+        }
+
+        Arrays.sort(j2rjestatud);           //sorteerin j2rjestamise massiivi
+        System.out.println(Arrays.toString(numbrid));
+        System.out.println(Arrays.toString(j2rjestatud));
+
+        for (int j = 0; j < 12; j++) {      //asetan numbritega nupud gridPanele
+            Button nupp = createButton(Integer.toString(numbrid[j]));
+            keskJ2r.add(nupp, j % 3, j / 3);
+                        /*nupp.setOnAction((event) -> {
+
+                            //j2rKontroll();
+                            System.out.println(nupp.getText());
+                            if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
+                                System.out.println("Tubli!");
+                            }
+                        });*/
+        }
 
         Label[] ylesanded = new Label[10];                      //massiivid keskpaneeli sisu jaoks
         TextField[] vastused = new TextField[10];
@@ -120,51 +158,7 @@ public class Aken {
             e5.setToggleGroup(g);
             g.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {    //valiku tulemus
                 if (g.getSelectedToggle().getUserData().toString() == "J2rjestamine") {
-
-                    boolean tunnus;
-                    int loendur = 0;
-                    int arv;
-                    int j2rjestatud[] = new int[12];
-                    int numbrid[] = new int[12];
-                    for (int mitmes = 0; mitmes < 12; mitmes++) {   //teen 12-se massiivi suvanumbritest
-                        do {
-                            tunnus = false;
-                            if (max < 12) {
-                                arv = (int) Math.floor(Math.random() * 12) + 1;
-                            } else {
-                                arv = (int) Math.floor(Math.random() * max) + 1;
-                            }
-                            for (int i = 0; i < mitmes; i++)
-                                if (arv == numbrid[i]) tunnus = true;
-                        } while (tunnus);
-                        numbrid[mitmes] = arv;          //lisan arvu segamini massiivi
-                        j2rjestatud[mitmes] = arv;      //lisan arvu j2rjestamise massiivi
-                    }
-
-                    Arrays.sort(j2rjestatud);           //sorteerin j2rjestamise massiivi
-                    System.out.println(Arrays.toString(numbrid));
-                    System.out.println(Arrays.toString(j2rjestatud));
-
-                    for (int j = 0; j < 12; j++) {      //asetan numbritega nupud gridPanele
-                        Button nupp = new Button(Integer.toString(numbrid[j]));
-                        keskJ2r.add(nupp, j % 3, j / 3);
-                        nupp.setOnAction((event) -> {
-
-                            //j2rKontroll();
-                            System.out.println(nupp.getText());
-                            if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
-                                System.out.println("Tubli!");
-                            }
-                        });
-                    }
-                    /*public void j2rKontroll(){
-                        if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
-                            System.out.println("Tubli!");
-                            loendur++;
-                        }
-                    }*/
                     aken.setCenter(keskJ2r);                           //keskosa täitmine järjestamise nuppudega
-
                 }
                 else {
                     aken.setCenter(kesk);
@@ -178,5 +172,17 @@ public class Aken {
                 }
             });
         valik.getChildren().addAll(e1, e2, e3, e4, e5);     //Valiku nupud ülapaneelile
+    }
+    private Button createButton(String text) {
+        Button nupp = new Button(text);
+        nupp.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        nupp.setOnAction(e -> {j2rKontroll(); System.out.println(text);});
+        return nupp ;
+    }
+    private void j2rKontroll(){
+        if (Integer.parseInt(nupp.getText())==j2rjestatud[loendur]){
+            System.out.println("Tubli!");
+            loendur++;
+        }
     }
 }
