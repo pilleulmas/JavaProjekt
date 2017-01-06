@@ -2,22 +2,15 @@
  * Created by Pille on 18.10.2016.
  */
 public class Tehted {
-    String Tehte_tyyp;
+    String Liik;
     int Arv_1, Arv_2, Vastus, a, b, c;
     String mark ="";
 
-    /*
-    public String getTehte_tyyp() {return Tehte_tyyp;}
-    public int getArv_1() {return Arv_1;}
-    public int getArv_2() {return Arv_2;}
-    public int getVastus() {return Vastus;}
-    */
-
-    public void genereeri(int max, String tehte_tyyp) {         //tehete genereerimine
+    public void genereeri(int max, String liik) {         //tehete genereerimine
         this.Arv_1 = (int) Math.floor(Math.random()*max)+1;     //esimene suvaarv
         this.Arv_2 = (int) Math.floor(Math.random()*max)+1;     //teine suvaarv
-        this.Tehte_tyyp = tehte_tyyp;
-        switch(tehte_tyyp){                                     //tehte tüübi järgi tehete kuvamine
+        this.Liik = liik;
+        switch(liik){                                     //tehte liigi järgi tehete kuvamine
             case "Liitmine":                                    //arv_1 + arv_2 = vastus
                 this.Vastus= Arv_1 + Arv_2;
                 this.a= Arv_1;
