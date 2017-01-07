@@ -1,6 +1,5 @@
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -9,7 +8,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import java.util.Arrays;
 import static javafx.scene.paint.Color.*;
 
 /**
@@ -80,39 +78,6 @@ public class Aken {
             kesk.setAlignment(Pos.TOP_CENTER);              //keskpaneeli algseis
             kesk.add(pealkiri, 1, 0,4,1);
 
-        kontroll.setFont(Font.font ("Verdana", 20));
-        kontroll.setOnAction((event) -> {                   //kontrolli nupuvajutuse tegevus
-            aeg = System.currentTimeMillis() - start;
-            aegaKulus = (int)aeg/1000;
-            System.out.println("Kontrollin vastused!");
-            System.out.println(aeg/1000);
-            for(int i =0; i<ylArv;i++){                            //kontrollib ükshaaval vastused üle
-                try{
-                    if(Integer.parseUnsignedInt(vastused[i].getText())== tehted[i].c) {
-                        oiged[i].setText("Õige vastus!");
-                        oiged[i].setTextFill(BLACK);
-                    } else {oiged[i].setText("Vale vastus, õige on "+tehted[i].c);
-                        oiged[i].setTextFill(RED);
-                    }
-                }
-                catch(Exception e) {
-                    oiged[i].setText("Vastus on puudu!");
-                    oiged[i].setTextFill(ORANGE);
-                }
-            }
-            Label aeg = new Label("");
-            aeg.setText("Aega kulus "+aegaKulus+" sekundit");
-            aeg.setFont(Font.font ("Verdana", 20));
-            if( kesk.getChildren().get(kesk.getChildren().size()-1).getClass().getName().equals( "javafx.scene.control.Label")) {
-
-                Label viimane = (Label) kesk.getChildren().get(kesk.getChildren().size()-1);
-                viimane.setText("");
-            }
-            kesk.add(aeg,0,12,4,1);
-        });
-
-        System.out.println(aegaKulus);
-
             aken.setTop(valik);                             //Kogu akna täitmine
             aken.setCenter(kesk);
             aken.setLeft(vasak);
@@ -129,13 +94,12 @@ public class Aken {
             valikunupp.setOnAction(e -> {
                 start = System.currentTimeMillis();
                 aegaKulus=0;
-                System.out.println(liik);
-                System.out.println(start);
                 kesk = teeKesk(liik);
                 aken.setCenter(kesk);
             });
         }
     }
+
     public Button looNupp(String text) {               //järjestamise nuppude loomine
         Button nupp = new Button(text);
         nupp.setStyle("-fx-font: 20 verdana; -fx-base: #b6e7c9;");
@@ -169,6 +133,7 @@ public class Aken {
             aken.setCenter(tagasi);                           //keskosa täitmine järjestamise nuppudega
         }
         else {
+            int kontArv = ylArv;
             tagasi = new GridPane();
             aken.setCenter(tagasi);
             pealkiri.setText(liik);
@@ -191,6 +156,34 @@ public class Aken {
                 tagasi.add(oiged[i],2,i+1);
 
             }
+            kontroll.setFont(Font.font ("Verdana", 20));
+            kontroll.setOnAction((event) -> {                   //kontrolli nupuvajutuse tegevus
+                aeg = System.currentTimeMillis() - start;
+                aegaKulus = (int)aeg/1000;
+                for(int i =0; i<kontArv;i++){                            //kontrollib ükshaaval vastused üle
+                    try{
+                        if(Integer.parseUnsignedInt(vastused[i].getText())== tehted[i].c) {
+                            oiged[i].setText("Õige vastus!");
+                            oiged[i].setTextFill(BLACK);
+                        } else {oiged[i].setText("Vale vastus, õige on "+tehted[i].c);
+                            oiged[i].setTextFill(RED);
+                        }
+                    }
+                    catch(Exception e) {
+                        oiged[i].setText("Vastus on puudu!");
+                        oiged[i].setTextFill(ORANGE);
+                    }
+                }
+                Label aeg = new Label("Aega kulus "+aegaKulus+" sekundit");
+                aeg.setFont(Font.font ("Verdana", 20));
+                //kui kontrolli nuppu on juba varem vajutatud, siis tühjendan kõigepealt välja ära
+                if( kesk.getChildren().get(kesk.getChildren().size()-1).getClass().getName().equals( "javafx.scene.control.Label")) {
+                    Label viimane = (Label) kesk.getChildren().get(kesk.getChildren().size()-1);
+                    viimane.setText("");
+                }
+                kesk.add(aeg,0,12,4,1);
+            });
+
             tagasi.add(kontroll, 1, 11); //kontrolli nupp keskpaneelile
         }
         return tagasi;

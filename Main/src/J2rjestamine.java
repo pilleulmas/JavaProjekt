@@ -1,8 +1,6 @@
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-
 import java.util.Arrays;
-
 import static javafx.scene.paint.Color.BLACK;
 import static javafx.scene.paint.Color.LIMEGREEN;
 import static javafx.scene.paint.Color.RED;
@@ -29,7 +27,6 @@ public class J2rjestamine {
                 Label aeg = new Label("Aega kulus "+Aken.aegaKulus+" sekundit");
                 aeg.setFont(Font.font ("Verdana", 20));
                 Aken.kesk.add(aeg,0,7,4,1);                         //Lisan kulunud aja
-                System.out.println(Aken.aeg);
                 viimane.setText("Tubli! Leidsid viimase!");
                 viimane.setTextFill(LIMEGREEN);
                 loendur++;
@@ -54,6 +51,7 @@ public class J2rjestamine {
             }
         }
     }
+    
     public static void looMassiivid(int max){           //järjestamise massiivide tekitamine
         for (int mitmes = 0; mitmes < 12; mitmes++) {   //teen 12-se massiivi suvanumbritest
             do {
@@ -71,6 +69,5 @@ public class J2rjestamine {
         }
 
         Arrays.sort(j2rjestatud);           //sorteerin j2rjestamise massiivi
-
     }
 }
