@@ -6,11 +6,11 @@ public class Tehted {
     int Arv_1, Arv_2, Vastus, a, b, c;
     String mark ="";
 
-    public void genereeri(int max, String liik) {         //tehete genereerimine
+    public void genereeri(int max, String liik) {               //tehete genereerimine
         this.Arv_1 = (int) Math.floor(Math.random()*max)+1;     //esimene suvaarv
         this.Arv_2 = (int) Math.floor(Math.random()*max)+1;     //teine suvaarv
         this.Liik = liik;
-        switch(liik){                                     //tehte liigi järgi tehete kuvamine
+        switch(liik){                                           //tehte liigi järgi tehete kuvamine
             case "Liitmine":                                    //arv_1 + arv_2 = vastus
                 this.Vastus= Arv_1 + Arv_2;
                 this.a= Arv_1;
